@@ -1,54 +1,87 @@
+"use client";
+
+import { useScrollVideo } from "@/lib/useScrollVideo";
+
+const DESKTOP_SRC = "/videos/hero-scrub.mp4";
+const MOBILE_SRC = "/videos/hero-scrub-mobile.mp4";
+const POSTER = "/videos/hero-scrub-poster.jpg";
+const FALLBACK_IMAGE = "/images/hero-villa.jpg";
+
 export function Hero() {
+  const { sectionRef, viewportRef, videoRef, contentRef, status } = useScrollVideo({
+    src: DESKTOP_SRC,
+    mobileSrc: MOBILE_SRC,
+  });
+
   return (
-    <section className="relative overflow-hidden bg-navy pt-28 md:pt-32">
-      {/* ambient gradient wash */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(120% 90% at 50% 0%, #153560 0%, #0A1F3B 45%, #071730 100%)",
-        }}
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-24 left-1/2 h-[420px] w-[720px] -translate-x-1/2 rounded-full opacity-[0.16] blur-3xl"
-        style={{ background: "radial-gradient(circle, #C8A97E 0%, transparent 70%)" }}
-      />
+    // Tall wrapper supplies the scroll distance; the viewport inside stays pinned
+    // for the whole traversal, so scrolling scrubs the clip instead of advancing
+    // the page. Heights live in `globals.css` so the reduced-motion collapse can
+    // override them without any client-side branching.
+    <section ref={sectionRef} className="hero-scroll-area relative bg-navy">
+      <div ref={viewportRef} className="hero-sticky w-full overflow-hidden">
+        {status === "error" ? (
+          // Never leave a blank hero: fall back to the original still.
+          <img
+            src={FALLBACK_IMAGE}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        ) : (
+          // No `autoplay`, no `loop`, no controls — the clip is only ever seeked.
+          // The poster is the clip's own first frame, so the pre-load state is
+          // indistinguishable from the first frame of the experience.
+          <video
+            ref={videoRef}
+            poster={POSTER}
+            preload="auto"
+            muted
+            playsInline
+            disablePictureInPicture
+            aria-hidden="true"
+            tabIndex={-1}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        )}
 
-      <div className="relative shell pt-10 pb-14 text-center md:pt-16 md:pb-20">
-        <span className="eyebrow animate-fade-up text-gold">
-          Luxury Real Estate · Est. 2007
-        </span>
+        {/* Deliberately light: enough scrim for the type, not enough to mute the clip. */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-b from-navy/60 via-navy/15 to-navy/70"
+        />
 
-        <h1 className="heading-xl mx-auto mt-6 max-w-4xl animate-fade-up text-white text-shadow-hero [animation-delay:120ms]">
-          Discover Exceptional
-          <br className="hidden sm:block" /> Homes &amp; Investments
-        </h1>
+        <div
+          ref={contentRef}
+          className="relative z-10 flex h-full items-center justify-center"
+        >
+          <div className="shell pb-10 text-center">
+            <span className="eyebrow animate-fade-up text-gold-soft">
+              Luxury Real Estate · Est. 2007
+            </span>
 
-        <p className="body-lg mx-auto mt-7 max-w-2xl animate-fade-up text-white/70 [animation-delay:260ms]">
-          Premium properties in prime locations. Find your dream home or the perfect
-          investment with confidence.
-        </p>
-      </div>
+            <h1 className="heading-xl mx-auto mt-6 max-w-4xl animate-fade-up text-white text-shadow-hero [animation-delay:120ms]">
+              Discover Exceptional
+              <br className="hidden sm:block" /> Homes &amp; Investments
+            </h1>
 
-      <div className="relative">
-        <div className="mx-auto w-full max-w-[1680px] px-0 sm:px-4 lg:px-6">
-          <div className="relative overflow-hidden rounded-t-[28px] sm:rounded-[28px]">
-            <img
-              src="/images/hero-villa.jpg"
-              alt="Modern luxury villa with glass walls and infinity pool at blue hour"
-              width={2400}
-              height={1200}
-              fetchPriority="high"
-              className="h-[44vh] min-h-[300px] w-full animate-slow-zoom object-cover md:h-[56vh] md:min-h-[420px] lg:h-[60vh]"
-            />
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-navy/60 to-transparent"
-            />
+            <p className="body-lg mx-auto mt-7 max-w-2xl animate-fade-up text-white/75 [animation-delay:260ms]">
+              Premium properties in prime locations. Find your dream home or the
+              perfect investment with confidence.
+            </p>
           </div>
         </div>
+
+        {status === "loading" && (
+          <div className="pointer-events-none absolute inset-x-0 bottom-10 z-20 flex flex-col items-center gap-3">
+            <span className="relative block h-px w-24 overflow-hidden bg-white/25">
+              <span className="hero-load-bar absolute inset-y-0 left-0 block w-8 bg-gold" />
+            </span>
+            <span className="text-[0.62rem] font-semibold uppercase tracking-[0.32em] text-white/60">
+              Preparing experience
+            </span>
+          </div>
+        )}
       </div>
     </section>
   );

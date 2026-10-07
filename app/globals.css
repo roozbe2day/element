@@ -104,3 +104,51 @@
     text-shadow: 0 2px 30px rgba(4, 12, 24, 0.45);
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Scroll-driven hero
+   The wrapper is the scroll track; the sticky viewport is the "camera". The
+   video's timeline is mapped across the difference between the two, so the clip
+   runs from first frame to last over exactly this distance.
+--------------------------------------------------------------------------- */
+.hero-scroll-area {
+  height: 300vh;
+}
+
+.hero-sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+}
+
+/* Less thumb travel on touch devices for the same ~9s clip. */
+@media (max-width: 767px) {
+  .hero-scroll-area {
+    height: 240vh;
+  }
+}
+
+/* Reduced motion: collapse to a single viewport so there is nothing to scrub —
+   the hero becomes a static first frame and the JS loop never starts. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-area {
+    height: 100svh;
+  }
+
+  .hero-sticky {
+    position: relative;
+  }
+}
+
+@keyframes hero-load {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+.hero-load-bar {
+  animation: hero-load 1.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
