@@ -99,7 +99,7 @@ export function PropertyCarousel({
             scrollByCards(-1);
           }
         }}
-        className="no-scrollbar snap-x-mandatory flex cursor-grab touch-pan-x gap-6 overflow-x-auto pb-2 active:cursor-grabbing"
+        className="no-scrollbar snap-x-proximity flex cursor-grab touch-pan-x gap-6 overflow-x-auto pb-2 active:cursor-grabbing"
       >
         {properties.map((property) => (
           <div

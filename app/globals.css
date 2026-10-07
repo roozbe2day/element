@@ -94,8 +94,10 @@
     display: none;
   }
 
-  .snap-x-mandatory {
-    scroll-snap-type: x mandatory;
+  /* proximity (not mandatory) so programmatic smooth scrolling from the
+     carousel arrows is not cancelled by the snap engine. */
+  .snap-x-proximity {
+    scroll-snap-type: x proximity;
   }
 
   .text-shadow-hero {
