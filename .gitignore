@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+build
+.env
+.env.local
+.DS_Store
+*.log
+next-env.d.ts
+
+# Base44 sandbox-only run configuration (regenerated on import)
+docker-compose.base44.yml
+.base44/
+AGENTS.md
