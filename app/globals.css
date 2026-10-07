@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy: #0a1f3b;
+  --gold: #c8a97e;
+  --ivory: #f7f5f1;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-white font-sans text-ink antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: rgba(200, 169, 126, 0.35);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-sans tracking-tightest text-navy;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-shell px-5 sm:px-8 lg:px-10;
+  }
+
+  .section-pad {
+    @apply py-20 md:py-28 lg:py-32;
+  }
+
+  .eyebrow {
+    @apply text-label font-semibold uppercase text-gold-dark;
+  }
+
+  .heading-xl {
+    @apply text-[clamp(2.5rem,6vw,5rem)] font-extrabold leading-[1.03];
+  }
+
+  .heading-lg {
+    @apply text-[clamp(2rem,4.2vw,3.25rem)] font-bold leading-[1.08];
+  }
+
+  .heading-md {
+    @apply text-[clamp(1.5rem,2.6vw,2.25rem)] font-bold leading-[1.15];
+  }
+
+  .body-lg {
+    @apply text-[1.0625rem] leading-[1.8] text-muted;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .snap-x-mandatory {
+    scroll-snap-type: x mandatory;
+  }
+
+  .text-shadow-hero {
+    text-shadow: 0 2px 30px rgba(4, 12, 24, 0.45);
+  }
+}
